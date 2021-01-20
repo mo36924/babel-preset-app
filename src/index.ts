@@ -8,6 +8,7 @@ import deadCodeElimination from "@mo36924/babel-plugin-dead-code-elimination";
 import iifeUnwrap from "@mo36924/babel-plugin-iife-unwrap";
 import inject, { Options as injectOptions } from "@mo36924/babel-plugin-inject";
 import replace from "@mo36924/babel-plugin-replace";
+import extensions, { Options as extensionsOptions } from "@mo36924/babel-plugin-replace-import-extensions";
 import resolve, { Options as resolveOptions } from "@mo36924/babel-plugin-resolve";
 
 type Api = ConfigAPI & typeof babel;
@@ -17,7 +18,8 @@ export type Options = {
   target?: "node" | "module" | "nomodule";
   jsx?: string;
   inject?: injectOptions;
-  namedExports?: commonjsOptions["namedExports"];
+  extensions?: extensionsOptions;
+  namedExports?: commonjsOptions;
 };
 
 const { NODE_ENV, NODE_TARGET } = process.env;
@@ -28,6 +30,7 @@ export default (api: Api, options: Options): TransformOptions => {
     target: __TARGET__ = NODE_TARGET ?? "node",
     jsx = "react",
     inject: _inject = {},
+    extensions: _extensions = {},
     namedExports = {},
   } = options;
 
@@ -125,11 +128,40 @@ export default (api: Api, options: Options): TransformOptions => {
           aliasFields: __NODE__ ? [] : ["browser"],
           mainFields: __NODE__ ? ["module", "main"] : ["browser", "module", "main"],
           conditionNames: __NODE__ ? ["import"] : ["browser", "import"],
-          extensions: [".tsx", ".ts", ".jsx", ".mjs", ".js", ".json"],
+          extensions: __NODE__
+            ? [
+                ".server.tsx",
+                ".server.ts",
+                ".server.jsx",
+                ".server.mjs",
+                ".server.js",
+                ".server.json",
+                ".tsx",
+                ".ts",
+                ".jsx",
+                ".mjs",
+                ".js",
+                ".json",
+              ]
+            : [
+                ".client.tsx",
+                ".client.ts",
+                ".client.jsx",
+                ".client.mjs",
+                ".client.js",
+                ".client.json",
+                ".tsx",
+                ".ts",
+                ".jsx",
+                ".mjs",
+                ".js",
+                ".json",
+              ],
           ignore: [/^\0/],
         } as resolveOptions,
       ],
-      [commonjs, __NODE__ ? ({ namedExports } as commonjsOptions) : false],
+      [extensions, _extensions as extensionsOptions],
+      [commonjs, __NODE__ ? (namedExports as commonjsOptions) : false],
       [inject, _inject],
     ],
   };

@@ -1,6 +1,6 @@
 {
   "name": "@mo36924/babel-preset-app",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "babel-preset-app",
   "repository": {
     "type": "git",
@@ -117,11 +117,12 @@
   "dependencies": {
     "@babel/preset-env": "^7.12.11",
     "@babel/preset-react": "^7.12.10",
-    "@mo36924/babel-plugin-commonjs": "^1.0.1",
+    "@mo36924/babel-plugin-commonjs": "^1.0.2",
     "@mo36924/babel-plugin-dead-code-elimination": "^1.0.4",
     "@mo36924/babel-plugin-iife-unwrap": "^1.0.1",
     "@mo36924/babel-plugin-inject": "^1.0.1",
     "@mo36924/babel-plugin-replace": "^1.0.0",
+    "@mo36924/babel-plugin-replace-import-extensions": "^1.0.0",
     "@mo36924/babel-plugin-resolve": "^1.0.1",
     "@types/babel__core": "^7.1.12",
     "@types/babel__preset-env": "^7.9.1"
