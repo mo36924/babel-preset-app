@@ -9,6 +9,7 @@ import iifeUnwrap from "@mo36924/babel-plugin-iife-unwrap";
 import inject, { Options as injectOptions } from "@mo36924/babel-plugin-inject";
 import replace from "@mo36924/babel-plugin-replace";
 import extensions, { Options as extensionsOptions } from "@mo36924/babel-plugin-replace-import-extensions";
+import prefix, { Options as prefixOptions } from "@mo36924/babel-plugin-replace-import-prefix";
 import resolve, { Options as resolveOptions } from "@mo36924/babel-plugin-resolve";
 
 type Api = ConfigAPI & typeof babel;
@@ -18,6 +19,7 @@ export type Options = {
   target?: "node" | "module" | "nomodule";
   jsx?: string;
   inject?: injectOptions;
+  prefixes?: prefixOptions;
   extensions?: extensionsOptions;
   namedExports?: commonjsOptions;
 };
@@ -30,6 +32,7 @@ export default (api: Api, options: Options): TransformOptions => {
     target: __TARGET__ = NODE_TARGET ?? "node",
     jsx = "react",
     inject: _inject = {},
+    prefixes = {},
     extensions: _extensions = {},
     namedExports = {},
   } = options;
@@ -121,6 +124,7 @@ export default (api: Api, options: Options): TransformOptions => {
       ],
       [deadCodeElimination],
       [iifeUnwrap],
+      [prefix, prefixes],
       [
         resolve,
         {
